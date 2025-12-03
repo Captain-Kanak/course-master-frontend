@@ -59,7 +59,7 @@ export default function Navbar() {
         </div>
 
         <div>
-          <Link href={"/courses"}>
+          <Link href={"/register"}>
             <button className="bg-orange-500 text-white text-lg py-2 px-3 cursor-pointer hover:bg-orange-600 transition-all duration-200 rounded-md">
               Enroll Now
             </button>
