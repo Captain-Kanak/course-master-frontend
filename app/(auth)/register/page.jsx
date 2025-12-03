@@ -1,5 +1,6 @@
 import React from "react";
 import RegisterForm from "../components/RegisterForm";
+import SocialLogin from "../components/SocialLogin";
 
 export default function RegisterPage() {
   return (
@@ -23,6 +24,8 @@ export default function RegisterPage() {
             Login
           </a>
         </p>
+
+        <SocialLogin />
       </div>
     </section>
   );
