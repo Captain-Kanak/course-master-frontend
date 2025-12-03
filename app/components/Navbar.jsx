@@ -10,7 +10,6 @@ import { IoMdClose } from "react-icons/io";
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const status = "authenticated";
 
   const links = (
     <>
@@ -19,7 +18,7 @@ export default function Navbar() {
           href="/"
           className={`${
             pathname === "/" ? "text-orange-500" : "text-gray-700"
-          } hover:text-orange-500 transition-colors font-semibold text-lg`}
+          } hover:text-orange-500 transition-all duration-200 font-semibold text-lg`}
         >
           Home
         </Link>
@@ -28,8 +27,8 @@ export default function Navbar() {
         <Link
           href="/courses"
           className={`${
-            pathname === "/products" ? "text-orange-500" : "text-gray-700"
-          } hover:text-orange-500 transition-colors font-semibold text-lg`}
+            pathname === "/courses" ? "text-orange-500" : "text-gray-700"
+          } hover:text-orange-500 transition-all duration-200 font-semibold text-lg`}
         >
           Courses
         </Link>
@@ -38,74 +37,41 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-gray-50/90 backdrop-blur shadow-md z-50">
-      <div className="navbar max-w-7xl mx-auto px-4 lg:px-0">
-        <div className="navbar-start flex items-center">
-          <div className="dropdown">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2 rounded-md cursor-pointer bg-transparent hover:bg-transparent focus:bg-transparent"
-            >
-              {isOpen ? (
-                <IoMdClose size={30} className="text-gray-700" />
-              ) : (
-                <HiMenu size={30} className="text-gray-700" />
-              )}
-            </button>
-
-            {isOpen && (
-              <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
-                {links}
-              </ul>
+    <nav className="fixed top-0 left-0 w-full bg-gray-50 shadow-md z-50">
+      <div className="container mx-auto flex justify-between items-center h-16 px-4 lg:px-0">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="lg:hidden rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-orange-500"
+          >
+            {isOpen ? (
+              <IoMdClose size={28} className="text-gray-700" />
+            ) : (
+              <HiMenu size={28} className="text-gray-700" />
             )}
-          </div>
+          </button>
 
-          <Link href="/">
-            <Logo />
+          <Logo />
+        </div>
+
+        <div className="hidden lg:flex flex-1 justify-center">
+          <ul className="flex items-center gap-6">{links}</ul>
+        </div>
+
+        <div>
+          <Link href={"/courses"}>
+            <button className="bg-orange-500 text-white py-2 px-3 cursor-pointer hover:bg-orange-600 transition-all duration-200 rounded-md">
+              Enroll Now
+            </button>
           </Link>
         </div>
-
-        {/* Navbar Center - Desktop */}
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">{links}</ul>
-        </div>
-
-        {/* Navbar End */}
-        <div className="navbar-end gap-3 lg:gap-4">
-          {status == "authenticated" ? (
-            <>
-              {/* <div className="border-3 border-orange-500 rounded-full">
-                <Image
-                  src={session?.user?.image}
-                  width={40}
-                  height={40}
-                  alt="User Image"
-                  className="rounded-full"
-                />
-              </div> */}
-              <button
-                onClick={() => signOut()}
-                className="bg-orange-500 py-1 lg:py-2 px-3 lg:px-4 rounded-lg cursor-pointer hover:bg-orange-600 transition-all duration-200 lg:font-semibold"
-              >
-                Log Out
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href="/login">
-                <button className="bg-orange-500 py-1 lg:py-2 px-3 lg:px-4 rounded-lg cursor-pointer hover:bg-orange-600 transition-all duration-200 lg:font-semibold">
-                  Log In
-                </button>
-              </Link>
-              <Link href="/register">
-                <button className="bg-orange-500 py-1 lg:py-2 px-3 lg:px-4 rounded-lg cursor-pointer hover:bg-orange-600 transition-all duration-200 lg:font-semibold">
-                  Register
-                </button>
-              </Link>
-            </>
-          )}
-        </div>
       </div>
+
+      {isOpen && (
+        <div className="lg:hidden bg-gray-50 shadow-md border-t border-gray-200">
+          <ul className="flex flex-col gap-2 px-4 py-3">{links}</ul>
+        </div>
+      )}
     </nav>
   );
 }

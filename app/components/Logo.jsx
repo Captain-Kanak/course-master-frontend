@@ -1,9 +1,15 @@
+import Link from "next/link";
+import Image from "next/image";
+
 export default function Logo() {
   return (
-    <div>
-      <h3 className="text-3xl lg:text-3xl font-bold text-black">
-        Course<span className="text-orange-500">Master</span>
-      </h3>
-    </div>
+    <Link href={"/"}>
+      <div className="flex items-center gap-1">
+        <Image src="/logo.png" alt="logo" width={40} height={40} />
+        <h1 className="text-black text-2xl font-bold">
+          Course <span className="text-orange-500">Master</span>
+        </h1>
+      </div>
+    </Link>
   );
 }
