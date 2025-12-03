@@ -1,0 +1,61 @@
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import loginUser from "@/app/helpers/loginUser";
+
+export const authOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
+
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+
+      async authorize(credentials) {
+        const res = await loginUser({
+          email: credentials.email,
+          password: credentials.password,
+        });
+
+        if (!res.success) return null;
+
+        const data = res.data;
+
+        return {
+          id: data.user._id,
+          name: data.user.name,
+          email: data.user.email,
+          token: data.token,
+        };
+      },
+    }),
+  ],
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.token = user.token;
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      session.user = {
+        id: token.id,
+        name: token.name,
+        email: token.email,
+        token: token.token,
+      };
+      return session;
+    },
+  },
+
+  pages: {
+    signIn: "/login",
+  },
+};
+
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };

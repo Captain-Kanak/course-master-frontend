@@ -1,25 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import registerUser from "@/app/helpers/registerUser";
+import toast from "react-hot-toast";
 
 export default function RegisterForm() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
+    const formData = new FormData(e.target);
+
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    const result = await registerUser({ name, email, password });
+
+    console.log(result);
+
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
   };
 
   return (
@@ -33,7 +34,6 @@ export default function RegisterForm() {
           type="text"
           name="name"
           required
-          onChange={handleChange}
           className="w-full mt-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none text-black"
           placeholder="John Doe"
         />
@@ -48,7 +48,6 @@ export default function RegisterForm() {
           type="email"
           name="email"
           required
-          onChange={handleChange}
           className="w-full mt-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none text-black"
           placeholder="example@email.com"
         />
@@ -63,7 +62,6 @@ export default function RegisterForm() {
           type="password"
           name="password"
           required
-          onChange={handleChange}
           className="w-full mt-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none text-black"
           placeholder="*******"
         />

@@ -1,25 +1,26 @@
 "use client";
-
-import React, { useState } from "react";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
+
+    const formData = new FormData(e.target);
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      toast.success("Login successful!");
+    }
   };
 
   return (
@@ -33,7 +34,6 @@ export default function LoginForm() {
           type="email"
           name="email"
           required
-          onChange={handleChange}
           className="w-full mt-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none text-black"
           placeholder="example@email.com"
         />
@@ -48,7 +48,6 @@ export default function LoginForm() {
           type="password"
           name="password"
           required
-          onChange={handleChange}
           className="w-full mt-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none text-black"
           placeholder="*******"
         />
