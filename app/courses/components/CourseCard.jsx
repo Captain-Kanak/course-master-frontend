@@ -33,9 +33,12 @@ export default function CourseCard({ course }) {
 
         {/* Button */}
         <div className="flex gap-3">
-          <button className="block text-center w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg font-medium transition-all cursor-pointer">
+          <Link
+            href={`/payments/${course._id}`}
+            className="block text-center w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg font-medium transition-all cursor-pointer"
+          >
             Enroll Now
-          </button>
+          </Link>
           <Link
             href={`/courses/${course._id}`}
             className="block text-center w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg font-medium 

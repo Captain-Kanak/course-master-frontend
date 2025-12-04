@@ -1,6 +1,7 @@
 "use client";
 
 import getCourseById from "@/app/helpers/course/getCourseById";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -26,9 +27,11 @@ export default function CourseDetails() {
         <p className="mt-4 text-2xl font-bold">${course.price}</p>
       </div>
 
-      <button className="block text-center font-semibold w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg transition-all cursor-pointer">
-        Enroll Now
-      </button>
+      <Link href={`/payments/${id}`}>
+        <button className="block text-center font-semibold w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg transition-all cursor-pointer">
+          Enroll Now
+        </button>
+      </Link>
 
       {/* Syllabus */}
       <div className="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6">
