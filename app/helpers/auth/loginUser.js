@@ -1,4 +1,4 @@
-export default async function loginUser({ email, password }) {
+const loginUser = async ({ email, password }) => {
   try {
     const response = await fetch(`http://localhost:5000/api/auth/login`, {
       method: "POST",
@@ -10,11 +10,21 @@ export default async function loginUser({ email, password }) {
 
     const result = await response.json();
 
+    if (!result.success) {
+      return {
+        success: false,
+        message: result.message || "Login failed",
+      };
+    }
+
     return result;
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       message: error.message,
     };
   }
-}
+};
+
+export default loginUser;

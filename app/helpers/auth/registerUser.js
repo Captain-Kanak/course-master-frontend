@@ -10,7 +10,7 @@ const registerUser = async (payload) => {
 
     const result = await response.json();
 
-    if (!response.ok) {
+    if (!result.success) {
       return {
         success: false,
         message: result.message || "Registration failed",
@@ -19,6 +19,7 @@ const registerUser = async (payload) => {
 
     return result;
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       message: error.message,

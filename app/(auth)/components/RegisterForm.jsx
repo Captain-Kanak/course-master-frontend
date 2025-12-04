@@ -1,6 +1,6 @@
 "use client";
 
-import registerUser from "@/app/helpers/registerUser";
+import registerUser from "@/app/helpers/auth/registerUser";
 import toast from "react-hot-toast";
 
 export default function RegisterForm() {
