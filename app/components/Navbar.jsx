@@ -15,6 +15,8 @@ export default function Navbar() {
   const { data: session } = useSession();
   const user = session?.user;
 
+  console.log(user);
+
   const links = (
     <>
       <li>

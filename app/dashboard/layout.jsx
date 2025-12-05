@@ -1,15 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 export default function DashboardLayout({ children }) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const pathname = usePathname();
 
-  // Optional: Simple role detection
   const role = session?.user?.role || "user";
+
+  useEffect(() => {
+    if (status === "loading") return;
+
+    const role = session?.user?.role;
+
+    if (!role) {
+      router.push("/login");
+      return;
+    }
+
+    // Role protection
+    if (pathname.startsWith("/dashboard/admin") && role !== "admin") {
+      router.push("/dashboard/student");
+    }
+
+    if (pathname.startsWith("/dashboard/student") && role !== "user") {
+      router.push("/dashboard/admin");
+    }
+  }, [session, status, pathname, router]);
 
   const sidebarLinks = {
     user: [
@@ -25,6 +46,8 @@ export default function DashboardLayout({ children }) {
       { label: "Assignments Review", href: "/dashboard/admin/review" },
     ],
   };
+
+  if (status === "loading") return <p>Loading...</p>;
 
   return (
     <div className="min-h-screen flex bg-gray-100">
