@@ -51,7 +51,6 @@ export default function DashboardLayout({ children }) {
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      {/* Sidebar */}
       <aside className="w-64 bg-white shadow-md p-6 hidden md:block">
         <h2 className="text-2xl font-bold mb-6 text-orange-600">Dashboard</h2>
 
@@ -73,7 +72,6 @@ export default function DashboardLayout({ children }) {
         </ul>
       </aside>
 
-      {/* Main Content Area */}
       <main className="flex-1 p-6">
         <div className="bg-white p-6 rounded-md shadow-sm">{children}</div>
       </main>
