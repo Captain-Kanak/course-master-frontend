@@ -1,9 +1,9 @@
 "use client";
 
-import getCourseById from "@/app/helpers/course/getCourseById";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import axiosPublic from "@/lib/axiosPublic";
 
 export default function CourseDetails() {
   const { id } = useParams();
@@ -11,8 +11,8 @@ export default function CourseDetails() {
 
   useEffect(() => {
     const fetchCourse = async () => {
-      const result = await getCourseById(id);
-      setCourse(result.data);
+      const result = await axiosPublic.get(`/api/courses/${id}`);
+      setCourse(result?.data?.data);
     };
     fetchCourse();
   }, [id]);
@@ -28,7 +28,7 @@ export default function CourseDetails() {
       </div>
 
       <Link href={`/payments/${id}`}>
-        <button className="block text-center font-semibold w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg transition-all cursor-pointer">
+        <button className="block text-center font-semibold w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg transition-all cursor-pointer mb-6">
           Enroll Now
         </button>
       </Link>

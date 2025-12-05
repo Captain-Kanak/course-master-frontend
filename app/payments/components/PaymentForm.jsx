@@ -3,10 +3,8 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import getCourseById from "@/app/helpers/course/getCourseById";
-import createPaymentIntent from "@/app/helpers/payment/createPaymentIntent";
-import { useSession } from "next-auth/react";
-import confirmEnroll from "@/app/helpers/payment/confirmEnroll";
+import axiosPublic from "@/lib/axiosPublic";
+import axiosSecure from "@/lib/axiosSecure";
 
 const CARD_OPTIONS = {
   style: {
@@ -31,13 +29,11 @@ export default function PaymentForm() {
   const { id } = useParams();
   const [course, setCourse] = useState({});
   const price = course.price;
-  const { data: session } = useSession();
-  const user = session?.user;
 
   useEffect(() => {
     const fetchCourse = async () => {
-      const result = await getCourseById(id);
-      setCourse(result.data);
+      const result = await axiosPublic.get(`/api/courses/${id}`);
+      setCourse(result.data?.data);
     };
     fetchCourse();
   }, [id]);
@@ -62,8 +58,12 @@ export default function PaymentForm() {
       console.log("[PaymentMethod]", paymentMethod);
     }
 
-    const paymentIntent = await createPaymentIntent({ id, user });
-    const secret = paymentIntent.data;
+    const paymentIntent = await axiosSecure.post(
+      "/api/payments/create-payment-intent",
+      { id }
+    );
+
+    const secret = paymentIntent.data?.data;
 
     const result = await stripe.confirmCardPayment(secret, {
       payment_method: paymentMethod.id,
@@ -74,13 +74,14 @@ export default function PaymentForm() {
     } else if (result.paymentIntent.status === "succeeded") {
       setPaymentError("");
       console.log("Payment Successful");
-      const res = await confirmEnroll({ id, user });
 
-      if (!res.success) {
+      const res = await axiosSecure.post("/api/payments/confirm-enrollment", {
+        id,
+      });
+
+      if (!res.data?.success) {
         setPaymentError(res.message);
       }
-
-      console.log(res);
     }
   };
 

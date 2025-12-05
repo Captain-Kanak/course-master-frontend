@@ -1,10 +1,9 @@
-import getCourses from "@/app/helpers/course/getCourses";
 import CourseCard from "./CourseCard";
+import axiosPublic from "@/lib/axiosPublic";
 
 export default async function PopularCourses() {
-  const result = await getCourses();
-
-  const courses = result.data;
+  const response = await axiosPublic.get("/api/courses");
+  const courses = response?.data?.data;
 
   return (
     <section className="py-16 bg-gray-50 dark:bg-gray-900">
